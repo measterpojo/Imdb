@@ -1,0 +1,65 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{% url 'index' %}">CodeBro</a>
+        <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown"  id="dropdown-pull">
+          {% if user.is_authenticated %}
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ user.username }}
+          </a>
+          
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+            
+            <a class="dropdown-item" href="{% url 'profile' user.username %}">Profile</a>
+            <a class="dropdown-item" href="{% url 'edit-profile' %}">Settings</a>
+            <div class="dropdown-divider"></div>
+            
+            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+            {% else %}
+            <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+            {% endif %}
+          </div>
+        </li>          
+        </ul>
+
+    </nav>
+
+    {% block banner %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+
+  <script>
+    if(typeof jQuery!=='undefined'){
+    console.log('jQuery Loaded');
+}
+else{
+    console.log('not loaded yet');
+}
+  </script>
+</html>

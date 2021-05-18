@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+{% load static %}]
+
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row" style="text-align: center;">
+                <h2>{{ movie_data.Title }}</h2>
+            </div>
+            <div class="col-12">        
+                <div class="row">
+
+                    <div class="col-lg-4">
+                        {% if our_db is True %}
+                        <img src="{{ movie_data.Poster.url }}">
+                        {% else %}
+                        <img src="{{ movie_data.Poster }}">
+                        {% endif %}
+                        {% if our_db is True %}
+
+                            <p>Genre: {% for genre in movie_data.Genre.all %}<b><a href="{{ genre.get_absolute_url }}">{{ genre }}</a>, </b>{% endfor %}</p>
+                            {% else %}
+                            
+                                Genre: <b>{{ movie_data.Genre }} </b>
+                        {% endif %}
+
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="card">
+                            <div class="card-header">
+                                <p>Director: <b>{{ movie_data.Director }}</b></p>
+                                <p>Writer: <b>{{ movie_data.Writer }}</b></p>
+                                {% if our_db is True %}
+                                    <p>Actors: {% for actor in movie_data.Actors.all %}<a href="{{ actor.get_absolute_url }}"><b>{{ actor }}</a>, </b>{% endfor %}</p>
+                                {% else %}
+                                    <p>Actors: <b>{{ movie_data.Actors }}</b></p>
+                                {% endif %}
+
+                                <p>Language: <b>{{ movie_data.Language }}</b></p>
+                                <p>Country: <b>{{ movie_data.Country }}</b></p>
+                                <p>Awards: <b>{{ movie_data.Awards }}</b></p>
+
+
+
+                            </div>
+                            <div class="card-body">
+                              <blockquote class="">
+                                <p>{{ movie_data.Plot }}</p>
+                              </blockquote>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div>
+                <hr/>
+            </div>
+            <div class="col-12">
+                <br>
+                <p>Box Office: <b>{{ movie_data.BoxOffice }}</b></p>
+                <p>imdb Votes: <b>{{ movie_data.imdbVotes }}</b></p>
+                <p>imdb ID: <b>{{ movie_data.imdbID }}</b></p>
+                <p>Production: <b>{{ movie_data.Production }}</b></p>
+
+                <br>
+                <a href="{% url 'rate-movie' movie_data.imdbID %}" class="">Rate</a>
+                <a href="{% url 'add-movies-to-watch' movie_data.imdbID %}" id="movies-to-watch" class="">Watchlist</a>
+                <a href="{% url 'add-movies-watched' movie_data.imdbID %}" id="watched-movies" class="">Watched</a>
+            </div>
+            <hr>
+            <div class="rating">
+                {% if our_db is True %}
+
+                    {% for movie in movie_data.Ratings.all %}
+      
+                        {% if movie.source == 'Internet Movie Database' %}
+                          <li class="collection-item avatar">
+                            <img src="" alt="" class="circle">
+                            <span class="title">{{ movie.source }}</span>
+                            <p><b>{{ movie.rating }}</b></p>
+                            </li>
+                        {% elif movie.source == 'Rotten Tomatoes' %}
+                          <li class="collection-item avatar">
+                            <img src="" alt="" class="circle">
+                            <span class="title">{{ movie.source }}</span>
+                            <p><b>{{ movie.rating }}</b></p>
+                          </li>
+                        {% else %}
+                            <li class="collection-item avatar">
+                              <img src="" alt="" class="circle">
+                              <span class="title">{{ movie.source }}</span>
+                              <p><b>{{ movie.rating }}</b></p>
+                            </li>
+                        {% endif %}
+      
+                    {% endfor %}
+    
+                  {% else %}
+                      
+                      <li class="collection-item avatar">
+                        <img src="" alt="" class="circle">
+                        <span class="title">{{ movie_data.Ratings.0.Source }}</span>
+                        <p><b>{{ movie_data.Ratings.0.Value }}</b></p>
+                      </li>
+    
+                      <li class="collection-item avatar">
+                        <img src="" alt="" class="circle">
+                        <span class="title">{{ movie_data.Ratings.1.Source }}</span>
+                        <p><b>{{ movie_data.Ratings.0.Value }}</b></p>
+                      </li>
+    
+                      <li class="collection-item avatar">
+                        <img src="" alt="" class="circle">
+                        <span class="title">{{ movie_data.Ratings.2.Source }}</span>
+                        <p><b>{{ movie_data.Ratings.0.Value }}</b></p>
+                      </li>
+  
+                {% endif %}
+                
+                
+            </div>
+
+            
+
+            <h4>Reviews</h4>
+
+            
+      
+                <div class="row">
+                  <div class="col-12 mb-5">
+                    <div class="card">
+                      <div class="card-content">
+                       <ul class="list-group">
+      
+                        {% for review in reviews %}
+                          <li class="list-group-item">
+      
+                          {% if review.user.profile.picture %}
+                            <img src="{{ review.user.profile.picture.url }}" alt="" class="circle">
+                          {% else %}
+                            <img height="50" src="{% static 'img/no_avatar.jpg' %}" alt="" class="circle">
+                          {% endif %}
+      
+                            <span class="title"><b>{{ review.user.first_name }} {{ review.user.last_name }}</b></span>
+                            <p>@{{ review.user.username }}</p>
+                            <p>{{ review.date }}</p>
+                          
+                          </li>
+
+                        {% empty %}
+
+                          <div class="" style="text-align: center; padding: 10px;">
+                              <strong> No Reviews: Be the first one </strong>
+                          </div>
+
+                        {% endfor %}
+
+      
+                      </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+      
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+
+
+const movieId = "{{ movie_data.imdbID }}"
+const watchedMovies = document.getElementById('watched-movies')
+
+
+watchedMovies.addEventListener('click', e=>{
+  e.preventDefault()
+
+  console.log(csrftoken)
+
+  $.ajax({
+    type:'POST',
+    url: movieId + '/addmoviewatched',
+    data:{
+      'csrfmiddlewaretoken': csrftoken
+    },
+    success: function(response){
+      console.log(response)
+    },
+    error: function(error){
+      console.log(error)
+    }
+  })
+
+})
+
+const moviesToWatch = document.getElementById('movies-to-watch')
+
+moviesToWatch.addEventListener('click', e=>{
+  e.preventDefault()
+
+  $.ajax({
+    type:'POST',
+    url: movieId + '/addtomovieswatched',
+    data:{
+      'csrfmiddlewaretoken': csrftoken
+    },
+    success: function(response){
+      console.log(response)
+    },
+    error: function(error){
+      console.log(error)
+    }
+  })
+
+})
+
+
+
+</script>
+
+
+
+{% endblock %}
+
+
+

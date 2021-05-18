@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+
+
+
+<!-- <div class="container">
+    <div class="col-lg-12">
+        <div class="row">
+            <form class="col-12 mt-5">
+                <h1 style="text-align: center;">Movies</h1>
+                <input placeholder="Search for a movie!!" class="col-12" type="text" id='' name='q' value="{{ request.GET.q }}"></input>
+            </form>
+        </div>
+    </div>
+</div> -->
+
+
+
+
+<div class="container">
+    <div class="col-lg-12">
+        <div class="row">
+            <form class="col-12 mt-5" id="searchform">
+                <h1 style="text-align: center;">Movies</h1>
+                <input placeholder="Search for a movie!!" class="col-12" type="text" id='search' name='q' value="{{ request.GET.q }}"></input>
+            </form>
+
+        </div>
+    </div>
+    <div class="row mt-5" id="movies">
+
+        <div id="notext" class="d-none">No Results for your search</div>
+                  
+        </div>
+    </div>
+    <div id="btn-load-container" class=" col-lg-12 mb-4 d-none" style="text-align: center;"> 
+        <button class="btn btn-info" id="load-btn">load more</button>
+    </div>    
+</div>
+
+<script>
+
+
+const movieContainerElement = document.getElementById('movies');
+const notext = document.getElementById('notext');
+const searchInput = document.getElementById('searchform');
+const loadbtnContainer = document.getElementById('btn-load-container')
+const loadbtn = document.getElementById('load-btn')
+console.log(loadbtn)
+
+
+
+
+let page_number = 1
+
+const getData = () =>{
+
+            var query = document.getElementById("search").value;
+
+            $.ajax({
+                type: 'GET',
+                url: 'http://www.omdbapi.com/?apikey=a8e92936&s=' + query + '&page=' + page_number,
+                data: JSON,
+                
+                success: function(response){
+
+                    loadbtnContainer.classList.remove('d-none')
+
+                    console.log('query', query.length)
+                    const returnData = response.Search               
+
+                    if (typeof returnData === 'undefined'){
+                        loadbtnContainer.classList.add('d-none')                    
+                    } else {
+                        loadbtnContainer.classList.remove('d-none')
+                    }
+
+                    if (typeof returnData === 'undefined' && query.length === 0){
+                        
+                        notext.classList.add('d-none')
+                    } else if (typeof returnData === 'undefined' && query.length !== 0) {
+
+                        notext.classList.remove('d-none')
+                    } else {
+                    returnData.forEach(el=>{
+                        
+                        movieContainerElement.innerHTML += `
+                    
+                            <div class="col-lg-4 col-md-4 mb-4">
+                                <a href="${el.imdbID}"><img src="${el.Poster}"></a>
+                                ${el.Title}
+                            </div>`
+
+                        });
+                    }
+                },
+                error:function(error){
+                    console.log('error',error)
+                }
+
+            });
+
+};
+
+loadbtn.addEventListener('click', ()=>{
+
+    page_number += 1
+    getData()
+
+})
+
+getData()
+
+</script>
+
+
+
+
+
+{% endblock %}
+
+

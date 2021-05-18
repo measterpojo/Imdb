@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card" style="width: 18rem;">
+                <img src="{{ movie.Poster.url }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">{{ movie.Title }}</h5>
+                  <p class="card-text">{{ movie.Plot }}</p>
+                </div>
+              </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <h4>Review</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <h4>Comments</h4>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

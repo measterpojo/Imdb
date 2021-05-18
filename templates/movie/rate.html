@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="container">
+  <div class="row">
+      <div class="col-lg-12">
+        <div class="">
+          <div class="">
+              <a href="{% url 'movie-details' movie.imdbID %}"><img src="{{ movie.Poster.url }}"></a> 
+          </div>
+          <div class="">
+            <div class="">
+              <span class=""><b>{{ movie.Title }}</b></span>
+              <span>{{ movie.Type }}</span>
+              <br>
+              <p>{{ movie.Plot }}</p>
+              <br>
+              <div class=""></div>
+              <br>
+              <form method="post" action="" role="form" class="col s12">
+                {% csrf_token %}
+              <div class="">
+                  {{ form.rate }}
+              </div>
+              <div class="">
+                  {{ form.text }}
+                <label for="textarea1">Opinion</label>
+              </div>
+
+              <button type="submit" name="action" class="">Rate</button>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+{% endblock %}

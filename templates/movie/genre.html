@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="jumbotron">
+    <h1 style="text-align: center;" class="display-4">#{{ genre }}</h1>
+</div>
+
+
+
+
+<div class="container">
+    <div class="row">  
+        <div class="col-lg-12">  
+            <div class="row">                     
+            {% for movie in movie_data %}
+
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <a href="{% url 'movie-details' movie.imdbID %}"><img src="{{ movie.Poster.url }}"></a>
+                    {{ movie.Title }}
+                </div>
+            {% endfor %}                      
+            </div>
+        </div>     
+    </div>
+</div>
+
+
+<div class="col-lg-12">
+    {% if movie_data.has_previous %}
+    <a href="?page={{ movie_data.previous_page_number }}" class="">Back</a>
+  {% endif %}
+
+  {% if movie_data.has_next %}
+  <a href="?page={{ movie_data.next_page_number }}" class="">Load more</a>
+  {% endif %}
+
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}
